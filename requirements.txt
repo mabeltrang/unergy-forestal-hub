@@ -1,0 +1,28 @@
+# Unión de las dependencias de las 5 herramientas.
+# Si una herramienta agrega una librería nueva, agrégala también aquí.
+streamlit>=1.50
+pandas>=2.0
+openpyxl>=3.1
+requests>=2.31
+pillow>=10.0
+numpy
+scipy
+altair
+matplotlib>=3.7
+python-docx>=1.1
+lxml
+# ForestGuard
+pypdf
+pymupdf
+python-multipart
+# Geoespacial (informe-predio, compensación)
+geopandas>=0.14
+shapely>=2.0
+fiona>=1.9
+pyproj
+contextily>=1.5
+folium
+streamlit-folium
+# Compensación (Google Earth Engine)
+earthengine-api
+geemap
