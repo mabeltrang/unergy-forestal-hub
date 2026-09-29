@@ -89,7 +89,21 @@ def _olvidar_modulos(excepto: Path | None = None, ninguna: bool = False) -> None
             del sys.modules[nombre]
 
 
+def panel_ayuda(h: Herramienta) -> None:
+    """Muestra el panel "Cómo usar" de la herramienta arriba en la barra lateral.
+
+    Se dibuja antes de correr la app, así que queda encima de lo que la
+    herramienta ponga en la barra lateral (uploaders, filtros…).
+    """
+    if not h.ayuda.strip():
+        return
+    with st.sidebar:
+        with st.expander("ℹ️ Cómo usar", expanded=h.ayuda_abierta):
+            st.markdown(h.ayuda)
+
+
 def correr(h: Herramienta) -> None:
+    panel_ayuda(h)
     try:
         carpeta = obtener_repo(h)
     except Exception as e:  # noqa: BLE001
@@ -103,5 +117,3 @@ def correr(h: Herramienta) -> None:
         os.environ[var] = valor.format(carpeta=carpeta)
 
     runpy.run_path(str(carpeta / h.archivo), run_name="__main__")
-
-
