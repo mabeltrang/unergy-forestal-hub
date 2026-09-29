@@ -89,6 +89,33 @@ def _olvidar_modulos(excepto: Path | None = None, ninguna: bool = False) -> None
             del sys.modules[nombre]
 
 
+# Colores fijos para el panel "Cómo usar". Algunas herramientas (ej. Compensación)
+# pintan todo el texto de la barra lateral de blanco con `!important`; como el
+# panel tiene fondo claro, las negritas quedaban invisibles. Estas reglas son más
+# específicas (.st-key-hub_ayuda), así que ganan sin tocar el repo de la herramienta.
+_CSS_AYUDA = """
+<style>
+[data-testid="stSidebar"] .st-key-hub_ayuda details {
+  background: #F7F5FC !important;
+  border: 1px solid #DCD3F2 !important;
+  border-radius: 8px !important;
+}
+[data-testid="stSidebar"] .st-key-hub_ayuda details summary {
+  background: #EDE7FA !important;
+}
+[data-testid="stSidebar"] .st-key-hub_ayuda details * {
+  color: #1A1A2E !important;
+}
+[data-testid="stSidebar"] .st-key-hub_ayuda details strong {
+  color: #4B2A8C !important;
+}
+[data-testid="stSidebar"] .st-key-hub_ayuda details em {
+  color: #4A4A68 !important;
+}
+</style>
+"""
+
+
 def panel_ayuda(h: Herramienta) -> None:
     """Muestra el panel "Cómo usar" de la herramienta arriba en la barra lateral.
 
@@ -98,8 +125,10 @@ def panel_ayuda(h: Herramienta) -> None:
     if not h.ayuda.strip():
         return
     with st.sidebar:
-        with st.expander("ℹ️ Cómo usar", expanded=h.ayuda_abierta):
-            st.markdown(h.ayuda)
+        with st.container(key="hub_ayuda"):
+            st.markdown(_CSS_AYUDA, unsafe_allow_html=True)
+            with st.expander("ℹ️ Cómo usar", expanded=h.ayuda_abierta):
+                st.markdown(h.ayuda)
 
 
 def correr(h: Herramienta) -> None:
