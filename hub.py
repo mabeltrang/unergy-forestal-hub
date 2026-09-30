@@ -30,14 +30,22 @@ def _git(*args, cwd=None) -> str:
 
 @st.cache_resource(show_spinner=False)
 def obtener_repo(h: Herramienta) -> Path:
-    """Clona el repo la primera vez (solo la última versión). Queda en caché hasta 'Actualizar'."""
+    """Clona o actualiza el repo (solo la última versión). Queda en caché hasta 'Actualizar' o un Reboot."""
     carpeta = CARPETA_BASE / h.clave
-    if not (carpeta / ".git").exists():
-        if carpeta.exists():
-            shutil.rmtree(carpeta)
-        CARPETA_BASE.mkdir(parents=True, exist_ok=True)
-        with st.spinner(f"Descargando {h.titulo} desde GitHub…"):
-            _git("clone", "--depth", "1", "--branch", h.rama, h.repo, str(carpeta))
+    if (carpeta / ".git").exists():
+        # La carpeta puede sobrevivir a un Reboot: se trae la última versión en vez de reusar la vieja.
+        try:
+            with st.spinner(f"Actualizando {h.titulo} desde GitHub…"):
+                _git("fetch", "--depth", "1", "origin", h.rama, cwd=carpeta)
+                _git("reset", "--hard", "FETCH_HEAD", cwd=carpeta)
+            return carpeta
+        except Exception:  # noqa: BLE001
+            shutil.rmtree(carpeta, ignore_errors=True)
+    if carpeta.exists():
+        shutil.rmtree(carpeta)
+    CARPETA_BASE.mkdir(parents=True, exist_ok=True)
+    with st.spinner(f"Descargando {h.titulo} desde GitHub…"):
+        _git("clone", "--depth", "1", "--branch", h.rama, h.repo, str(carpeta))
     return carpeta
 
 
