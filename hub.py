@@ -147,7 +147,9 @@ def correr(h: Herramienta) -> None:
         st.error(f"No se pudo descargar {h.titulo} ({h.repo}): {e}")
         return
 
-    _olvidar_modulos(excepto=carpeta)
+    # Se olvidan también los módulos de esta misma herramienta: si el repo se actualizó
+    # (fetch al arrancar o botón Actualizar), así se importa el código nuevo y no la versión en memoria.
+    _olvidar_modulos(ninguna=True)
     sys.path[:] = [p for p in sys.path if not p.startswith(str(CARPETA_BASE))]
     sys.path.insert(0, str(carpeta))
     for var, valor in h.entorno.items():
