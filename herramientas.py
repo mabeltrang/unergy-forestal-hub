@@ -122,4 +122,23 @@ HERRAMIENTAS = [
 *Las especies sin precio por m³ quedan vacías en el Excel: llénalas a mano.*
 """,
     ),
+    Herramienta(
+        clave="fichas",
+        titulo="Fichas forestales",
+        icono="📄",
+        repo="https://github.com/mabeltrang/Fichas-forestales.git",
+        descripcion="Fichas de árboles a podar o cercas vivas a talar, desde el inventario y las fotos.",
+        ayuda="""
+1. Escoge **quién firma** y si es **tala de cerca viva** o **poda**
+2. Sube el **inventario** (Excel)
+3. Sube las **fotos** en ZIP, nombradas *C90_1.jpg*, *C90_2.jpg*
+4. Escribe el **nombre del proyecto**
+5. Haz clic en **Generar fichas** y descarga el ZIP
+
+**Qué genera:** un Word con una ficha por página en la plantilla de Unergy, más un resumen en Excel.
+
+*Si un árbol puntual lleva otra medida, cámbialo en "Revisar o corregir árbol por árbol".*
+""",
+        ayuda_abierta=False,
+    ),
 ]

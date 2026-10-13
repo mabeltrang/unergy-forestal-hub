@@ -7,6 +7,7 @@ Una sola app de Streamlit con pestañas para:
 - Seguimiento CARs
 - Compensación
 - FGR-06 CORPOBOYACÁ
+- Fichas forestales (podas y talas de cercas vivas)
 
 **El hub no contiene el código de las herramientas.** Al arrancar descarga cada repo desde GitHub, en la última versión de su rama `main`, y corre su `app.py` dentro de una pestaña. Cada herramienta sigue siendo independiente: tiene su repo y su app publicada, y se puede cambiar sin tocar el hub.
 
@@ -23,6 +24,7 @@ Una sola app de Streamlit con pestañas para:
 | `herramientas.py` | Lista de herramientas: repo, rama y variables de entorno |
 | `requirements.txt` | Dependencias de Python de todas las herramientas juntas |
 | `packages.txt` | Paquetes del sistema (GDAL, tesseract…) |
+| `.streamlit/config.toml` | Límite de carga de archivos (1 GB, por los ZIP de fotos) |
 | `.streamlit/secrets.toml.example` | Plantilla de secretos. Los valores reales **no** van en el repo. |
 
 ## Secretos
