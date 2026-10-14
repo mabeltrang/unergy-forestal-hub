@@ -24,11 +24,16 @@ class Herramienta:
     # False = el panel arranca plegado (útil si la herramienta ya pone
     # uploaders o filtros en la barra lateral, para no empujarlos hacia abajo).
     ayuda_abierta: bool = True
+    # Link de la app publicada de la herramienta (Streamlit Cloud). Si se llena, el hub
+    # solo muestra un botón que la abre en su propia pestaña y NO la corre adentro:
+    # sin choques de módulos, con su propia memoria y sus subidas de archivos.
+    url: str = ""
 
 
 HERRAMIENTAS = [
     Herramienta(
         clave="informe-predio",
+        url="https://informe-predio-nocjrbt7f9e9f9wkkvd4hm.streamlit.app/",
         titulo="Informe de predio",
         icono="🗺️",
         repo="https://github.com/mabeltrang/informe-predio.git",
@@ -51,6 +56,7 @@ HERRAMIENTAS = [
     ),
     Herramienta(
         clave="forestguard",
+        url="https://forestguard-pro-mq5mwrdcxxxezqytzfzdpr.streamlit.app/",
         titulo="ForestGuard",
         icono="🛡️",
         repo="https://github.com/mabeltrang/ForestGuard-Pro.git",
@@ -58,6 +64,7 @@ HERRAMIENTAS = [
     ),
     Herramienta(
         clave="cars",
+        url="https://carsnuevo-lbgscrs6ghbvjz9fy5utfm.streamlit.app/",
         titulo="Seguimiento CARs",
         icono="📑",
         repo="https://github.com/mabeltrang/CARS_nuevo.git",
@@ -79,6 +86,7 @@ HERRAMIENTAS = [
     ),
     Herramienta(
         clave="compensacion",
+        url="https://hgnherxkswzksgjgf2zirj.streamlit.app/",
         titulo="Compensación",
         icono="🌱",
         repo="https://github.com/mabeltrang/analisis-compensacion-forestal.git",
@@ -102,6 +110,7 @@ HERRAMIENTAS = [
     ),
     Herramienta(
         clave="fgr06",
+        url="https://formato-inventario-corpoboyaca-gjaaekzltu38bnekuka9pb.streamlit.app/",
         titulo="FGR-06 CORPOBOYACÁ",
         icono="🌳",
         repo="https://github.com/mabeltrang/Formato-inventario-CORPOBOYACA.git",
@@ -127,6 +136,7 @@ HERRAMIENTAS = [
         titulo="Fichas forestales",
         icono="📄",
         repo="https://github.com/mabeltrang/Fichas-forestales.git",
+        url="https://fichas-forestales-le34wkasqepxj4rmwuzmpx.streamlit.app/",
         descripcion="Fichas de árboles a podar o cercas vivas a talar, desde el inventario y las fotos.",
         ayuda="""
 1. Escoge **quién firma** y si es **tala de cerca viva** o **poda**
