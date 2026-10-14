@@ -8,11 +8,19 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import threading
+import importlib
 from pathlib import Path
 
 import streamlit as st
 
 from herramientas import HERRAMIENTAS, Herramienta
+
+# sys.modules y sys.path son globales del proceso: si dos sesiones (dos pestañas o dos
+# personas) corren herramientas a la vez, una borra el paquete `core` mientras la otra lo
+# está importando (KeyError: 'core', ModuleNotFoundError). Este candado hace que las
+# herramientas se ejecuten de a una.
+_CANDADO = threading.RLock()
 
 CARPETA_BASE = Path(os.environ.get("HUB_CARPETA", Path(tempfile.gettempdir()) / "hub_herramientas"))
 
@@ -73,7 +81,8 @@ def actualizar_todo() -> list[str]:
             mensajes.append(f"✅ {h.titulo}: {version(h)}")
         except Exception as e:  # noqa: BLE001
             mensajes.append(f"❌ {h.titulo}: {e}")
-    _olvidar_modulos(ninguna=True)
+    with _CANDADO:
+        _olvidar_modulos(ninguna=True)
     obtener_repo.clear()
     st.cache_data.clear()
     return mensajes
@@ -149,10 +158,17 @@ def correr(h: Herramienta) -> None:
 
     # Se olvidan también los módulos de esta misma herramienta: si el repo se actualizó
     # (fetch al arrancar o botón Actualizar), así se importa el código nuevo y no la versión en memoria.
-    _olvidar_modulos(ninguna=True)
-    sys.path[:] = [p for p in sys.path if not p.startswith(str(CARPETA_BASE))]
-    sys.path.insert(0, str(carpeta))
-    for var, valor in h.entorno.items():
-        os.environ[var] = valor.format(carpeta=carpeta)
+    if not _CANDADO.acquire(blocking=False):
+        with st.spinner("Otra herramienta se está ejecutando, esperando turno…"):
+            _CANDADO.acquire()
+    try:
+        _olvidar_modulos(ninguna=True)
+        sys.path[:] = [p for p in sys.path if not p.startswith(str(CARPETA_BASE))]
+        sys.path.insert(0, str(carpeta))
+        importlib.invalidate_caches()
+        for var, valor in h.entorno.items():
+            os.environ[var] = valor.format(carpeta=carpeta)
 
-    runpy.run_path(str(carpeta / h.archivo), run_name="__main__")
+        runpy.run_path(str(carpeta / h.archivo), run_name="__main__")
+    finally:
+        _CANDADO.release()
