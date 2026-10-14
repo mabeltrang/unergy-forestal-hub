@@ -30,27 +30,8 @@ MORADO_FONDO = "#F0EBF9"
 TEXTO = "#1A1A2E"
 TEXTO_SUAVE = "#5A5A72"
 
-# Íconos de línea propios (no emojis: se ven iguales en Windows, Mac y celular).
+# Ícono de hoja para la marca de la cabecera
 _SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">{}</svg>'
-ICONOS = {
-    # mapa plegado con un punto marcado
-    "informe-predio": '<path d="M9 4 3.5 6v14L9 18l6 2 5.5-2V4L15 6 9 4Z"/><path d="M9 4v14M15 6v6"/>'
-                      '<path d="M18.5 15.2c0 1.6-2 3.3-2 3.3s-2-1.7-2-3.3a2 2 0 0 1 4 0Z"/>',
-    # escudo con chulo
-    "forestguard": '<path d="M12 3 5 6v5.5c0 4.3 3 7.9 7 9.5 4-1.6 7-5.2 7-9.5V6l-7-3Z"/><path d="m8.8 12 2.2 2.2 4.3-4.4"/>',
-    # resolución con reloj
-    "cars": '<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h4"/><path d="M14 3v4h4M14 3l4 4v3"/>'
-            '<path d="M8.5 10h5M8.5 13.5h3"/><circle cx="17" cy="17" r="4"/><path d="M17 15.2V17l1.2 1"/>',
-    # brote
-    "compensacion": '<path d="M12 21v-9"/><path d="M12 12C12 8 9.5 6 5 6c0 4 2.5 6 7 6Z"/>'
-                    '<path d="M12 14.5c0-3.4 2.2-5.5 7-5.5 0 3.6-2.4 5.5-7 5.5Z"/><path d="M8 21h8"/>',
-    # tabla que se convierte en formato
-    "fgr06": '<rect x="3.5" y="4" width="11" height="13" rx="1.5"/><path d="M3.5 8.5h11M3.5 12.8h11M8 4v13"/>'
-             '<path d="M17.5 9.5h3v10.5h-9V19.5"/><path d="m16 14.5 2-2-2-2"/>',
-    # ficha con foto del árbol
-    "fichas": '<rect x="4" y="3" width="16" height="18" rx="2"/><rect x="7" y="6" width="10" height="7" rx="1"/>'
-              '<path d="M12 12.5V9.8m0 0 1.6-1.4M12 9.8 10.4 8.6"/><path d="M7.5 16h9M7.5 18.5h5.5"/>',
-}
 
 _CSS = f"""
 <style>
@@ -91,11 +72,11 @@ _CSS = f"""
   .hub-tile:hover, .hub-tile:focus-visible {{ border-color: {MORADO}; background: #FCFAFF; outline: none; }}
   .hub-tile:focus-visible {{ box-shadow: 0 0 0 3px {MORADO_CLARO}; }}
   .hub-icono {{
-    width: 56px; height: 56px; border-radius: 14px; flex: none; display: grid; place-items: center;
-    background: {MORADO_FONDO}; color: {MORADO}; transition: background .15s ease, color .15s ease;
+    width: 62px; height: 62px; border-radius: 16px; flex: none; display: grid; place-items: center;
+    background: {MORADO_FONDO}; font-size: 34px; line-height: 1;
+    transition: background .15s ease, transform .15s ease;
   }}
-  .hub-icono svg {{ width: 30px; height: 30px; }}
-  .hub-tile:hover .hub-icono, .hub-tile:focus-visible .hub-icono {{ background: {MORADO}; color: #FFFFFF; }}
+  .hub-tile:hover .hub-icono, .hub-tile:focus-visible .hub-icono {{ background: {MORADO_CLARO}; transform: scale(1.06); }}
   .hub-texto {{ display: flex; flex-direction: column; gap: 5px; min-width: 0; }}
   .hub-nombre {{ font-weight: 700; font-size: 1.06rem; color: {MORADO_OSCURO}; }}
   .hub-desc {{ font-size: .86rem; line-height: 1.4; color: {TEXTO_SUAVE}; }}
@@ -118,10 +99,9 @@ def inicio() -> None:
     for h in HERRAMIENTAS:
         destino = h.url or f"./{h.clave}"
         nueva = ' target="_blank" rel="noopener"' if h.url else ' target="_self"'
-        icono = _SVG.format(ICONOS[h.clave]) if h.clave in ICONOS else h.icono
         tiles.append(
             f'<a class="hub-tile" href="{destino}"{nueva}>'
-            f'<span class="hub-icono">{icono}</span>'
+            f'<span class="hub-icono">{h.icono}</span>'
             f'<span class="hub-texto"><span class="hub-nombre">{h.titulo}</span>'
             f'<span class="hub-desc">{h.descripcion}</span></span></a>'
         )
