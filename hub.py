@@ -71,6 +71,9 @@ def actualizar_todo() -> list[str]:
     """Trae la última versión de cada repo y limpia las cachés."""
     mensajes = []
     for h in HERRAMIENTAS:
+        if h.url:
+            mensajes.append(f"↗️ {h.titulo}: corre en su propia app (se actualiza sola con cada commit)")
+            continue
         carpeta = CARPETA_BASE / h.clave
         try:
             if (carpeta / ".git").exists():
